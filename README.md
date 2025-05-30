@@ -16,4 +16,8 @@ El objetivo del proyecto es desarrollar un sistema de microinfusión que sea de 
 =======
 * Anna Bórquez
 * Javier Tanori
+<<<<<<< HEAD
 >>>>>>> 62997dafe7f3c299596ee6dceaa212ca8a476535
+=======
+* Cristina Ochoa
+>>>>>>> 44c456eaefdc31a5ecf7662c825e8578d3ad5f45
