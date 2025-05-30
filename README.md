@@ -16,3 +16,4 @@ El objetivo del proyecto es desarrollar un sistema de microinfusión que sea de 
 * Cristina Ochoa
 * Jesus Esquerra
 * Ximena Figueroa
+* Dereck Palafox
