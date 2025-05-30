@@ -8,5 +8,5 @@ El objetivo del proyecto es desarrollar un sistema de microinfusión que sea de 
 ## Participantes
 ======
 
-Gustavo Muñoz
-Luis Duarte
+* Gustavo Muñoz
+* Luis Duarte
