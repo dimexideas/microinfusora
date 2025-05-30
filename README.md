@@ -16,4 +16,5 @@ El objetivo del proyecto es desarrollar un sistema de microinfusión que sea de 
 * Ximena Figueroa
 * Dereck Palafox
 * Victor Burruel
+
 *Angelica Pesqueira
