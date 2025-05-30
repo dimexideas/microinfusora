@@ -12,3 +12,4 @@ El objetivo del proyecto es desarrollar un sistema de microinfusión que sea de 
 * Luis Duarte
 * Anna Bórquez
 * Javier Tanori
+* Cristina Ochoa
