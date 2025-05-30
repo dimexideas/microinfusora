@@ -10,5 +10,10 @@ El objetivo del proyecto es desarrollar un sistema de microinfusión que sea de 
 
 * Gustavo Muñoz
 * Luis Duarte
+<<<<<<< HEAD
 * Sofia Piña 
 
+=======
+* Anna Bórquez
+* Javier Tanori
+>>>>>>> 62997dafe7f3c299596ee6dceaa212ca8a476535
