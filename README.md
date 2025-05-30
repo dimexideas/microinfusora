@@ -16,7 +16,7 @@ Desarrollaremos un sistema de microinfusión que sea de código abierto y cuyo e
 2. Desarrollar las capacidades técnicas para el diseño, desarrollo, pruebas y producción de un dispositivo de microinfusión.
 3. Enfoque en seguridad, precisión, consistencia y costo.
 
-## IMPORTANTE
+## ⚠️ IMPORTANTE ⚠️
 
 En la fase actual del proyecto ( Mayo 2025 ) NO buscamos que el trabajo que desarrollemos tenga una aplicación / uso / pruebas en seres vivos. Para poder avanzar a otro tipo de aplicaciones, será necesario primero el desarrollo de estudios y validaciones alrededor de investigación y validación de la mano de profesionales.
 
