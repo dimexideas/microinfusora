@@ -85,16 +85,16 @@ enum State {
   ST_BOLUS_MANUAL,          // — Acceso a sub-menú de bolo manual
   ST_BOLUS_MANUAL_EXTDUR,   // — Acceso a sub-menú de bolo cuadrado
   ST_BOLUS_CANCEL,          // — Acceso a sub-menú de cancelación de bolo cuadrado
-  ST_CONFIG,                // Acceso a menú de configuraciones
-  ST_TIME,                  // — Acceso a sub-menú de configuración de fecha
-  ST_LIMITS,                // — Acceso a sub-menú de configuración de máximos de insulina ( bolos, etc )
-  ST_COMMS,                 // — Acceso a sub-menú de configuración de comunicación bluetooth / otros.
   ST_BASAL,                 // Acceso a sub-menú de configuración de perfiles basal
   ST_BASAL_CONF_SELECT,     // — Acceso a sub-sub-menú de configuración de basal de seleccionar basales.
   ST_BASAL_TEMP,            // — Acceso a sub-sub-menú de configuración de basal temporal ( porcentaje arriba / abajo de basal por X tiempo )
   ST_BASAL_CONF,            // — Acceso a sub-sub-menú de configuración de basal ( de hora A a hora B que cantidad de insulina U/hr )
   ST_BASAL_CONF_ADD,        // — — Acceso a sub-sub-menú de configuración de basal de agregar basales.
   ST_BASAL_CONF_EDIT,       // — — Acceso a sub-sub-menú de configuración de basal de editar basales.
+  ST_CONFIG,                // Acceso a menú de configuraciones
+  ST_TIME,                  // — Acceso a sub-menú de configuración de fecha
+  ST_LIMITS,                // — Acceso a sub-menú de configuración de máximos de insulina ( bolos, etc )
+  ST_COMMS,                 // — Acceso a sub-menú de configuración de comunicación bluetooth / otros.
   ST_SUSPEND_SELECT,        // Acceso a menú de suspender todo.
   ST_SUSPEND,               // — Acceso a sub-menú de suspender.
   ST_CONTINUE               // — Acceso a sub-menú de reanudar.
