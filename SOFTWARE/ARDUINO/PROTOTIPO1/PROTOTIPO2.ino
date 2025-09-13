@@ -37,9 +37,10 @@ Btn btns[4] = {
   {BTN_UP,   true, 0},
   {BTN_DOWN, true, 0}
 };
-const uint16_t DEBOUNCE_MS = 35;
+
+const uint16_t DEBOUNCE_MS = 100;
 const uint16_t REPEAT_START_MS = 500;
-const uint16_t REPEAT_RATE_MS  = 120;
+const uint16_t REPEAT_RATE_MS  = 200;
 
 bool pressedEdge(uint8_t index) {
   bool now = digitalRead(btns[index].pin);
@@ -102,36 +103,68 @@ enum State {
 State state = ST_HOME;
 
 int menuIndex = 0;
-const int MENU_COUNT = 9;
+const int MENU_COUNT = 5;
+
+const char* items[MENU_COUNT] = {
+  "CEBADO",
+  "BOLO",
+  "BASAL",
+  "AJUSTES",
+  "SUSPENDER"
+};
+
+const State base_states[MENU_COUNT] = {
+  ST_PRIME,
+  ST_BOLUS,
+  ST_BASAL,
+  ST_CONFIG,
+  ST_SUSPEND
+};
 
 void drawHome() {
   lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print("Bat ");
-  lcd.print(batteryPercent);
-  lcd.print("%  Ins ");
-  if (insulinRemaining < 0) insulinRemaining = 0;
-  lcd.print((int)insulinRemaining);
+  lcd.print("BAT ");
+  lcd.print("100%");
+  lcd.print(" ");
+  lcd.print(300.0);
   lcd.print("U");
+
+  // TODO: AGREGAR FECHA & HORA
 }
 
 void drawMenu() {
   lcd.clear();
-  const char* items[MENU_COUNT] = {
-    "Cebado",
-    "Bolo manual",
-    "Cancelar bolo",
-    "Limitar bolo",
-    "Infusion basal",
-    "Auto programar",
-    "Salir"
-  };
-  // Mostrar 2 líneas con cursor
   int next = (menuIndex+1) % MENU_COUNT;
   lcd.setCursor(0,0); lcd.print(">");
   lcd.print(items[menuIndex]);
   lcd.setCursor(0,1); lcd.print(" ");
   lcd.print(items[next]);
+}
+
+void drawPrime() {
+  lcd.clear();
+  lcd.setCursor(0,0); lcd.print("CEBADO");
+}
+
+void drawBolus() {
+  lcd.clear();
+  lcd.setCursor(0,0); lcd.print("BOLO");
+}
+
+void drawBasal() {
+  lcd.clear();
+  lcd.setCursor(0,0); lcd.print("BASAL");
+}
+
+void drawConfig() {
+  lcd.clear();
+  lcd.setCursor(0,0); lcd.print("AJUSTES");
+}
+
+void drawSuspend() {
+  lcd.clear();
+  lcd.setCursor(0,0); lcd.print("SUSPENDER");
 }
 
 // ===================== Setup =====================
@@ -154,11 +187,10 @@ void setup() {
   digitalWrite(ms1Pin, HIGH);
   digitalWrite(ms2Pin, HIGH);
   digitalWrite(ms3Pin, HIGH);
-  motorEnable(false);
 
   lcd.begin(16,2);
-  lcd.print("Microinfusora");
-  lcd.setCursor(0,1); lcd.print("Iniciando...");
+  lcd.print("MICROINFUSORA");
+  lcd.setCursor(0,1); lcd.print("INICIANDO...");
   delay(900);
   drawHome();
 }
@@ -172,10 +204,10 @@ void loop() {
             state = ST_MENU;
             menuIndex = 0;
             drawMenu();
-            beepOK();
           }
           // Cancelación rápida
           if (pressedEdge(0)) {
+            state = ST_HOME;
             drawHome();
           }
           // Scroll para refrescar pantalla
@@ -196,39 +228,65 @@ void loop() {
           }
 
           if (pressedEdge(1)) { // OK
-            beepOK();
-            switch (menuIndex) {
-              case 0: state = ST_PRIME; break;
-              case 1: state = ST_BOLUS_MANUAL; tmpUnits = 1.0f; break;
-              case 2: state = ST_BOLUS_CANCEL; break;
-              case 3: state = ST_LIMITS; break;
-              case 4: state = ST_BASAL; break;
-              case 6: state = ST_HOME; drawHome(); break;
+            state = static_cast<State>(base_states[menuIndex]);
+
+            if ( state == ST_PRIME ) {
+              drawPrime();
+            }
+            if ( state == ST_BOLUS ) {
+              drawBolus();
+            }
+            if ( state == ST_BASAL ) {
+              drawBasal();
+            }
+            if ( state == ST_CONFIG ) {
+              drawConfig();
+            }
+            if ( state == ST_SUSPEND ) {
+              drawSuspend();
             }
           }
 
           if (pressedEdge(0)) { // BACK
-            state = ST_HOME; drawHome();
+            state = ST_HOME; 
+            drawHome();
           }
 
         } break;
 
-        case ST_PRIME: {
+        case ST_PRIME: {          
+          if (pressedEdge(0)) { // BACK
+            state = ST_MENU; 
+            drawMenu();
+          }
         } break;
 
-        case ST_BOLUS_MANUAL: {
-        } break;
-
-        case ST_BOLUS_MANUAL_EXTDUR: {
-        } break;
-
-        case ST_BOLUS_CANCEL: {
-        } break;
-
-        case ST_LIMITS: {
+        case ST_BOLUS: {
+          if (pressedEdge(0)) { // BACK
+            state = ST_MENU; 
+            drawMenu();
+          }
         } break;
 
         case ST_BASAL: {
+          if (pressedEdge(0)) { // BACK
+            state = ST_MENU; 
+            drawMenu();
+          }
+        } break;
+
+        case ST_CONFIG: {
+          if (pressedEdge(0)) { // BACK
+            state = ST_MENU; 
+            drawMenu();
+          }
+        } break;
+
+        case ST_SUSPEND: {
+          if (pressedEdge(0)) { // BACK
+            state = ST_MENU; 
+            drawMenu();
+          }
         } break;
 
     }
