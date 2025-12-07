@@ -1,4 +1,4 @@
-//https://wokwi.com/projects/441378105660326913//
+//https://wokwi.com/projects/449649246302984193//
 #include <LiquidCrystal.h>
 #include <EEPROM.h>
 
@@ -208,6 +208,7 @@ void loop() {
           // Cancelación rápida
           if (pressedEdge(0)) {
             state = ST_HOME;
+            menuIndex = 0;
             drawHome();
           }
           // Scroll para refrescar pantalla
@@ -217,34 +218,33 @@ void loop() {
         } break;
 
         case ST_MENU: {
-          if (heldRepeat(2)) { // UP
-            menuIndex = (menuIndex - 1 + MENU_COUNT) % MENU_COUNT;
+          if (pressedEdge(2)) { // UP
+            if ( menuIndex == 0 ){
+              menuIndex = MENU_COUNT - 1;
+            } else {
+              menuIndex = (menuIndex - 1);
+            }
             drawMenu();
           }
           
-          if (heldRepeat(3)) { // DOWN
-            menuIndex = (menuIndex + 1) % MENU_COUNT;
+          if (pressedEdge(3)) { // DOWN
+            if ( menuIndex == MENU_COUNT - 1 ) {
+              menuIndex = 0;
+            } else {
+              menuIndex = (menuIndex + 1);
+            }
             drawMenu();
           }
 
           if (pressedEdge(1)) { // OK
             state = static_cast<State>(base_states[menuIndex]);
 
-            if ( state == ST_PRIME ) {
-              drawPrime();
-            }
-            if ( state == ST_BOLUS ) {
-              drawBolus();
-            }
-            if ( state == ST_BASAL ) {
-              drawBasal();
-            }
-            if ( state == ST_CONFIG ) {
-              drawConfig();
-            }
-            if ( state == ST_SUSPEND ) {
-              drawSuspend();
-            }
+            if (state == ST_PRIME)   drawPrime();
+            if (state == ST_BOLUS)   drawBolus();
+            if (state == ST_BASAL)   drawBasal();
+            if (state == ST_CONFIG)  drawConfig();
+            if (state == ST_SUSPEND) drawSuspend();
+
           }
 
           if (pressedEdge(0)) { // BACK
