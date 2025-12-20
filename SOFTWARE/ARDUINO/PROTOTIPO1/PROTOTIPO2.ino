@@ -158,9 +158,9 @@ void drawPrime() {
     lcd.print("REBOBINANDO");
   } else if (state == ST_PRIME || state == ST_PRIMING) {
     if (curStep == 0) {
-      lcd.print("OK PARA INICIAR");
+      lcd.print("OK INICIA");
     } else {
-      lcd.print("OK PARA REBOBINAR");
+      lcd.print("OK REBOBINA");
     }
   } else if (state == ST_PRIMING_START) {
     lcd.print("CEBANDO...");
@@ -229,6 +229,30 @@ void setup() {
   }
 }
 
+// ================ Motor Control =================
+
+void motorAdvance(int direction) {
+  if (direction == 0) {
+    digitalWrite(dirPin, LOW); // anti Horario
+
+    digitalWrite(stepPin, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(stepPin, LOW);
+    delayMicroseconds(1000);
+
+    curStep--;
+  } else if (direction == 1) {
+    digitalWrite(dirPin, HIGH); // Horario
+
+    digitalWrite(stepPin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(stepPin, LOW);
+    delayMicroseconds(10);
+
+    curStep++;
+  }
+}
+
 // ===================== Loop =====================
 void loop() {
   switch (state) {
@@ -294,9 +318,10 @@ void loop() {
 
   case ST_PRIME: {
     if (pressedEdge(1)) { // OK
-      if (curStep > 0.0) {
+      if (curStep >
+          0.0) { // Si el motor está en mas de 0 pasos, debemos rebobinar.
         state = ST_REWINDING;
-      } else {
+      } else { // Si el motor está en 0 pasos, debemos cebar.
         state = ST_PRIMING;
       }
       drawPrime();
@@ -308,49 +333,34 @@ void loop() {
   } break;
 
   case ST_PRIMING: {
-    if (heldRepeat(1)) { // HOLD OK
+    if (heldRepeat(1)) { // HOLD OK para cebar.
       state = ST_PRIMING_START;
       drawPrime();
     }
-    if (pressedEdge(0)) { // BACK
+    if (pressedEdge(0)) { // BACK para salir de cebado.
       state = ST_PRIME;
       drawPrime();
     }
   } break;
 
   case ST_PRIMING_START: {
-    digitalWrite(dirPin, HIGH); // Horario
-
-    if (heldRepeat(1)) { // HOLD OK
-      digitalWrite(stepPin, HIGH);
-      delayMicroseconds(10);
-      digitalWrite(stepPin, LOW);
-      delayMicroseconds(10);
-
-      curStep++;
+    if (heldRepeat(1)) { // HOLD OK para confirmar cebado y mover motor.
+      motorAdvance(1);
       drawPrime();
     }
 
-    if (pressedEdge(0)) { // BACK
+    if (pressedEdge(0)) { // BACK para salir de cebado.
       state = ST_PRIME;
       drawPrime();
     }
   } break;
 
   case ST_REWINDING: {
-    if (curStep > 0) {
-      digitalWrite(dirPin, LOW); // anti Horario
+    while (curStep > 0) { // Mientras los pasos de motor sean mas de 0, mover el
+                          // motor de regreso a 0.
+      motorAdvance(0);
     }
-
-    while (curStep > 0) {
-      digitalWrite(stepPin, HIGH);
-      delayMicroseconds(1000);
-      digitalWrite(stepPin, LOW);
-      delayMicroseconds(1000);
-
-      curStep--;
-    }
-    if (curStep == 0) {
+    if (curStep == 0) { // Si el motor ya está en 0, regresar al menú de cebado.
       state = ST_PRIME;
       drawPrime();
     }
