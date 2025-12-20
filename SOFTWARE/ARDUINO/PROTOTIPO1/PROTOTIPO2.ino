@@ -16,7 +16,13 @@ const int ms2Pin =
     10; // TAMAÑO DE PASO. 0 = 1/16, 1 = 1/8, 2 = 1/4, 3 = 1/2, 4 = 1/1.
 const int ms3Pin =
     A3; // TAMAÑO DE PASO. 0 = 1/16, 1 = 1/8, 2 = 1/4, 3 = 1/2, 4 = 1/1.
+
+// VARIABLES MOTOR & INSULINA.
 int curStep = 0; // PASO ACTUAL.
+const float reservoirCapacity =
+    300;                  // CONFIGURACION DE CAPACIDAD DE RESERVORIO.
+float reservoirLevel = 0; // NIVEL DE RESERVORIO.
+float stepUnits = 0.1;    // UNIDADES DE INSULINA POR PASOS DE MOTOR.
 
 // Botones
 const int BTN_BACK = 13; // ESC  // Escape/ Atrás / Cancelar
@@ -132,7 +138,7 @@ void drawHome() {
   lcd.print("BAT ");
   lcd.print("100%");
   lcd.print(" ");
-  lcd.print(300.0);
+  lcd.print(reservoirLevel);
   lcd.print("U");
 
   // TODO: AGREGAR FECHA & HORA
@@ -241,6 +247,7 @@ void motorAdvance(int direction) {
     delayMicroseconds(1000);
 
     curStep--;
+    updateReservoir();
   } else if (direction == 1) {
     digitalWrite(dirPin, HIGH); // Horario
 
@@ -250,7 +257,14 @@ void motorAdvance(int direction) {
     delayMicroseconds(10);
 
     curStep++;
+    updateReservoir();
   }
+}
+
+// ================== Reservoir ===================
+
+void updateReservoir() {
+  reservoirLevel = reservoirCapacity - (curStep * stepUnits);
 }
 
 // ===================== Loop =====================
