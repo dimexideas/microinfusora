@@ -1,0 +1,4 @@
+Añado los códigos modificados en Arduino IDE, ya que en la versión física se utiliza un Driver y stepper motor distintos.
+Los cambios fueron:
+- Cabiar la declaración de entradas utilizadas en wokwi, por las entradas utilizadas en físico.
+- Poner como comentarios las declaraciones de microstepping. 
